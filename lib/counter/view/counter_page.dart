@@ -1,7 +1,11 @@
+import 'package:dera_x_neddy/assets/assets.gen.dart';
 import 'package:dera_x_neddy/counter/counter.dart';
-import 'package:dera_x_neddy/l10n/l10n.dart';
+import 'package:dera_x_neddy/widgets/touchable_opacity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:js' as js;
+
+import 'package:gap/gap.dart';
 
 class CounterPage extends StatelessWidget {
   const CounterPage({super.key});
@@ -15,29 +19,157 @@ class CounterPage extends StatelessWidget {
   }
 }
 
-class CounterView extends StatelessWidget {
+class CounterView extends StatefulWidget {
   const CounterView({super.key});
 
   @override
+  State<CounterView> createState() => _CounterViewState();
+}
+
+class _CounterViewState extends State<CounterView> {
+  @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
+    final currentWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.counterAppBarTitle)),
-      body: const Center(child: CounterText()),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: () => context.read<CounterCubit>().increment(),
-            child: const Icon(Icons.add),
-          ),
-          const SizedBox(height: 8),
-          FloatingActionButton(
-            onPressed: () => context.read<CounterCubit>().decrement(),
-            child: const Icon(Icons.remove),
-          ),
-        ],
+      appBar: const EmptyAppBar(),
+      body: Center(
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('$currentWidth'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Assets.svgs.icLogo.svg(
+                      width: context.screenWidth(.4),
+                      fit: BoxFit.cover,
+                      colorFilter: const ColorFilter.mode(
+                        Color(0xFFAD8F64),
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                  ],
+                ),
+                const Gap(40),
+                if (currentWidth <= 399)
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TouchableOpacity(
+                        width: context.screenWidth(.4),
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFFAD8F64),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onTap: () {
+                          js.context.callMethod(
+                            'open',
+                            ['https://photos.app.goo.gl/sMwCwf4fpukXTY9bA'],
+                          );
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Text(
+                            'Upload photos',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Gap(20),
+                      TouchableOpacity(
+                        width:context.screenWidth(.4),
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFFAD8F64),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onTap: () {},
+                        child: const Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Text(
+                            'View our menu',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                else
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TouchableOpacity(
+                        width: context.screenWidth(.2),
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFFAD8F64),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onTap: () {
+                          js.context.callMethod(
+                            'open',
+                            ['https://photos.app.goo.gl/sMwCwf4fpukXTY9bA'],
+                          );
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Text(
+                            'Upload memories',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const Gap(40),
+                      TouchableOpacity(
+                        width: context.screenWidth(.2),
+                        decoration: ShapeDecoration(
+                          color: const Color(0xFFAD8F64),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onTap: () {},
+                        child: const Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Text(
+                            'View our menu',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -52,4 +184,32 @@ class CounterText extends StatelessWidget {
     final count = context.select((CounterCubit cubit) => cubit.state);
     return Text('$count', style: theme.textTheme.displayLarge);
   }
+}
+
+class EmptyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const EmptyAppBar({
+    super.key,
+    this.color,
+  });
+
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+    );
+  }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(0);
+}
+
+extension CustomContext on BuildContext {
+  double screenHeight([double percent = 1]) =>
+      MediaQuery.of(this).size.height * percent;
+
+  double screenWidth([double percent = 1]) =>
+      MediaQuery.of(this).size.width * percent;
 }

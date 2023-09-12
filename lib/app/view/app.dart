@@ -1,5 +1,4 @@
 import 'package:dera_x_neddy/counter/counter.dart';
-import 'package:dera_x_neddy/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
@@ -14,8 +13,6 @@ class App extends StatelessWidget {
           accentColor: const Color(0xFF13B9FF),
         ),
       ),
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
       home: const CounterPage(),
     );
   }
