@@ -3,10 +3,8 @@
 import 'dart:js' as js;
 
 import 'package:dera_x_neddy/assets/assets.gen.dart';
-import 'package:dera_x_neddy/counter/counter.dart';
 import 'package:dera_x_neddy/widgets/touchable_opacity.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class CounterPage extends StatelessWidget {
@@ -14,10 +12,7 @@ class CounterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => CounterCubit(),
-      child: const CounterView(),
-    );
+    return const CounterView();
   }
 }
 
@@ -197,6 +192,8 @@ class MenuPage extends StatelessWidget {
           child: Image.network(
             'https://firebasestorage.googleapis.com/v0/b/todolist-a3a31.appspot.com/o/Menu.png?alt=media&token=0a952dd0-71ad-49ce-ac7d-1b2059ed6413',
             height: context.screenHeight(),
+            // loadingBuilder: (context, child, loadingProgress) =>
+            //     const CircularProgressIndicator(),
           ),
         ),
       ),
