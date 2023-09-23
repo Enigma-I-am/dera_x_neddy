@@ -1,10 +1,12 @@
+// ignore_for_file: avoid_web_libraries_in_flutter
+
+import 'dart:js' as js;
+
 import 'package:dera_x_neddy/assets/assets.gen.dart';
 import 'package:dera_x_neddy/counter/counter.dart';
 import 'package:dera_x_neddy/widgets/touchable_opacity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'dart:js' as js;
-
 import 'package:gap/gap.dart';
 
 class CounterPage extends StatelessWidget {
@@ -39,7 +41,6 @@ class _CounterViewState extends State<CounterView> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('$currentWidth'),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -87,7 +88,7 @@ class _CounterViewState extends State<CounterView> {
                       ),
                       const Gap(20),
                       TouchableOpacity(
-                        width:context.screenWidth(.4),
+                        width: context.screenWidth(.4),
                         decoration: ShapeDecoration(
                           color: const Color(0xFFAD8F64),
                           shape: RoundedRectangleBorder(
@@ -150,7 +151,12 @@ class _CounterViewState extends State<CounterView> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        onTap: () {},
+                        onTap: () => Navigator.push(
+                          context,
+                          MaterialPageRoute<MenuPage>(
+                            builder: (context) => const MenuPage(),
+                          ),
+                        ),
                         child: const Padding(
                           padding: EdgeInsets.all(8),
                           child: Text(
@@ -175,14 +181,64 @@ class _CounterViewState extends State<CounterView> {
   }
 }
 
-class CounterText extends StatelessWidget {
-  const CounterText({super.key});
+class MenuPage extends StatelessWidget {
+  const MenuPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final count = context.select((CounterCubit cubit) => cubit.state);
-    return Text('$count', style: theme.textTheme.displayLarge);
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.pop(context);
+        return Future(() => true);
+      },
+      child: Scaffold(
+        appBar: const EmptyAppBar(),
+        body: Center(
+          child: Image.network(
+            'https://firebasestorage.googleapis.com/v0/b/todolist-a3a31.appspot.com/o/Menu.png?alt=media&token=0a952dd0-71ad-49ce-ac7d-1b2059ed6413',
+            height: context.screenHeight(),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CustomBorder extends StatelessWidget {
+  const CustomBorder({
+    required this.child,
+    super.key,
+    // this.onTap,
+    this.borderColor = const Color(0xFFEFE9E7),
+    this.backgroundColor,
+    this.padding = const EdgeInsets.all(16),
+    this.radius = 8,
+  });
+  final Widget child;
+  // final void Function()? onTap;
+  final Color borderColor;
+  final Color? backgroundColor;
+  final EdgeInsets padding;
+  final double radius;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        border: Border.all(
+          color: borderColor,
+        ),
+        borderRadius: BorderRadius.all(
+          Radius.circular(radius),
+        ),
+      ),
+      child: Padding(
+        padding: padding,
+        child: child,
+      ),
+    );
   }
 }
 
